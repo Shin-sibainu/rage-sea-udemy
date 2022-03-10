@@ -4,6 +4,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import vertexShader from "./shader/water/vertexShader";
 import fragmentShader from "./shader/water/fragmentShader";
 import * as dat from "lil-gui";
+// import mountainImage from "./textures/mountain.jpg";
 
 //デバッグ
 const gui = new dat.GUI({ width: 300 });
@@ -22,6 +23,7 @@ const canvas = document.querySelector(".webgl");
 
 // Scene
 const scene = new THREE.Scene();
+scene.background = new THREE.Color("#000000");
 
 /**
  * Textures
@@ -29,11 +31,11 @@ const scene = new THREE.Scene();
 const textureLoader = new THREE.TextureLoader();
 
 // Geometry
-const geometry = new THREE.PlaneGeometry(2, 2, 512, 512);
+const geometry = new THREE.PlaneGeometry(12, 12, 512, 512);
 
 //色
-debugObject.depthColor = "#186691";
-debugObject.surfaceColor = "#9bd8ff";
+debugObject.depthColor = "#2d81ae";
+debugObject.surfaceColor = "#66c1f9";
 
 // Material
 const material = new THREE.ShaderMaterial({
@@ -46,8 +48,8 @@ const material = new THREE.ShaderMaterial({
     uBigWavesSpeed: { value: 0.75 },
     uDepthColor: { value: new THREE.Color(debugObject.depthColor) },
     uSurfaceColor: { value: new THREE.Color(debugObject.surfaceColor) },
-    uColorOffset: { value: 0.08 },
-    uColorMultiplier: { value: 5 },
+    uColorOffset: { value: 0.03 },
+    uColorMultiplier: { value: 7.6 },
   },
 });
 
@@ -120,7 +122,9 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   100
 );
-camera.position.set(0.55, 0.65, 1);
+//カメラの起点
+camera.position.set(0, 0.22, 1);
+camera.lookAt(0, 13.5, 0);
 scene.add(camera);
 
 // Controls
@@ -145,6 +149,8 @@ const animate = () => {
   //時間取得
   const elapsedTime = clock.getElapsedTime();
   material.uniforms.uTime.value = elapsedTime;
+
+  //カメラを円周上に周回させる。
 
   controls.update();
 
