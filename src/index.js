@@ -31,7 +31,7 @@ scene.background = new THREE.Color("#000000");
 const textureLoader = new THREE.TextureLoader();
 
 // Geometry
-const geometry = new THREE.PlaneGeometry(12, 12, 512, 512);
+const geometry = new THREE.PlaneGeometry(15, 15, 512, 512);
 
 //色
 debugObject.depthColor = "#2d81ae";
@@ -127,7 +127,6 @@ const camera = new THREE.PerspectiveCamera(
 );
 //カメラの起点
 camera.position.set(0, 0.23, 0);
-// camera.lookAt(0, -3, 30);
 scene.add(camera);
 
 // Controls
@@ -143,23 +142,10 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-//cursor
-// const cursor = {};
-// cursor.x = 0;
-// cursor.y = 0;
-// // console.log(cursor);
-// window.addEventListener("mousemove", (event) => {
-//   cursor.x = event.clientX / sizes.width - 0.5;
-//   cursor.y = event.clientY / sizes.height - 0.5;
-//   // console.log(cursor);
-// });
-
 /**
  * Animate
  */
 const clock = new THREE.Clock();
-let clickCount = 1;
-let isDive = false;
 
 const animate = () => {
   //時間取得
@@ -171,38 +157,16 @@ const animate = () => {
   camera.position.x = Math.sin(elapsedTime * 0.17) * 3.0;
   camera.position.z = Math.cos(elapsedTime * 0.17) * 3.0;
 
+  camera.lookAt(
+    Math.cos(elapsedTime),
+    Math.sin(elapsedTime) * 0.7,
+    Math.sin(elapsedTime) * 0.4
+  );
+
   // controls.update();
 
   renderer.render(scene, camera);
   window.requestAnimationFrame(animate);
-
-  if (clickCount % 2 == 0 && isDive == false) {
-    camera.position.y -= 0.01;
-
-    // console.log(camera.position.y);
-    if (camera.position.y <= -0.4) {
-      isDive = true;
-    }
-  }
-
-  if (clickCount % 2 == 1 && isDive == true) {
-    camera.position.y += 0.01;
-
-    // console.log(camera.position.y);
-    if (camera.position.y >= 0.23) {
-      isDive = false;
-    }
-  }
 };
 
 animate();
-
-/* html script */
-const diveButton = document.getElementById("diveButton");
-
-diveButton.addEventListener("click", () => {
-  // console.log("clicked");
-  //カメラを移動
-  clickCount++;
-  console.log(clickCount);
-});
