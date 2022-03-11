@@ -4,7 +4,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import vertexShader from "./shader/water/vertexShader";
 import fragmentShader from "./shader/water/fragmentShader";
 import * as dat from "lil-gui";
-// import mountainImage from "./textures/mountain.jpg";
+import skyImage from "./textures/sky.jpg";
 
 //デバッグ
 const gui = new dat.GUI({ width: 300 });
@@ -23,12 +23,15 @@ const canvas = document.querySelector(".webgl");
 
 // Scene
 const scene = new THREE.Scene();
-scene.background = new THREE.Color("#000000");
+// scene.background = new THREE.Color("#ffffff");
+scene.fog = new THREE.Fog(0xdfe9f3, 100, 500);
 
 /**
  * Textures
  */
 const textureLoader = new THREE.TextureLoader();
+const skyTexture = textureLoader.load(skyImage);
+scene.background = skyTexture;
 
 // Geometry
 const geometry = new THREE.PlaneGeometry(15, 15, 512, 512);
@@ -36,6 +39,10 @@ const geometry = new THREE.PlaneGeometry(15, 15, 512, 512);
 //色
 debugObject.depthColor = "#2d81ae";
 debugObject.surfaceColor = "#66c1f9";
+
+//fog
+// const fog = new THREE.Fog("#f5f5f5", 150, 700);
+// scene.fog = fog;
 
 // Material
 const material = new THREE.ShaderMaterial({
@@ -99,7 +106,7 @@ gui
   .step(0.001)
   .name("uColorMultiplier");
 
-gui.show(false);
+gui.show(true);
 
 // Mesh
 const mesh = new THREE.Mesh(geometry, material);
@@ -159,7 +166,7 @@ const animate = () => {
 
   camera.lookAt(
     Math.cos(elapsedTime),
-    Math.sin(elapsedTime) * 0.7,
+    Math.sin(elapsedTime) * 0.5,
     Math.sin(elapsedTime) * 0.4
   );
 
